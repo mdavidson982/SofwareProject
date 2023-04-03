@@ -31,19 +31,22 @@ print(group2dArray)
 
 section2dArray = []
 
+
+sectionData = pd.DataFrame(columns=["Group","Section","First Name","Last Name","Student ID", "Grade"])
 for i in range(len(group2dArray)):
   print("Prininting Current Class, {section}".format(section = group2dArray[i][0]))
   section2dArray.append(group2dArray[i][0])
   for j in range(len(group2dArray[i])):
     if j > 0:
       with open(group2dArray[i][j], 'r') as section:
-        classData = np.genfromtxt(section, dtype=str,skip_header=1,delimiter=",",deletechars="~!@#$%^&*()-=+~\|]}[{'; /?.><")
+        classData = np.genfromtxt(section,skip_header=1,delimiter=",",deletechars="~!@#$%^&*()-=+~\|]}[{'; /?.><", dtype = str)
         print(classData)
-    else:
-        classData = (group2dArray[i][0])
+        for y in range(len(classData)):
+            sectionData = sectionData.append({"Group":group2dArray[i][0],"Section":group2dArray[i][j],"First Name":classData[y][0],"Last Name":classData[y][1],"Student ID":classData[y][2],"Grade":classData[y][3]},ignore_index=True)
 
-print(classData[2][1])
-    
+print(sectionData.to_string())
+
+ 
       
 
   
