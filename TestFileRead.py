@@ -27,9 +27,17 @@ else:
     DataFrame = dp.letterTogpa(DataFrame)
     gradepoint_mean_by_class = DataFrame.groupby("Section")["gradepoint"].mean()
     gradepoint_mean_by_group = DataFrame.groupby("Group")["gradepoint"].mean()
+    grade_counts_by_class = DataFrame.groupby("Section")["Grade"].value_counts()
+    grade_counts_by_group = DataFrame.groupby("Group")["Grade"].value_counts()
+
     print(DataFrame.to_string())
     print(gradepoint_mean_by_class)
     print(gradepoint_mean_by_group)
+    print(grade_counts_by_class)
+    print(grade_counts_by_group)
+
+    #for index, row in grade_counts_by_class.iterrows():
+        #print(row)
     
 
         
