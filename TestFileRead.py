@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 import FileReading
+import DataProcessing as dp
 #This is an example of how to use the FileReading object.
 
 #Set the fileName. This is the parameter for creating a FileReading Object
@@ -22,4 +23,14 @@ if isinstance(DataFrame,tuple):
     print("Missing File: ", DataFrame[1])
 #if it's not a tuple. It's a DataFrame
 else:
+    #print(DataFrame.to_string())
+    DataFrame = dp.letterTogpa(DataFrame)
+    gradepoint_mean_by_class = DataFrame.groupby("Section")["gradepoint"].mean()
+    gradepoint_mean_by_group = DataFrame.groupby("Group")["gradepoint"].mean()
     print(DataFrame.to_string())
+    print(gradepoint_mean_by_class)
+    print(gradepoint_mean_by_group)
+    
+
+        
+    
