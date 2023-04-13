@@ -11,7 +11,9 @@ import tkinter.scrolledtext as st
 from tkinter.ttk import *
 from tkinter.filedialog import askopenfile
 import os
-#import FileReading as fr
+import FileReading as fr
+import DataProcessing as dp
+
 
 window = tk.Tk()
 
