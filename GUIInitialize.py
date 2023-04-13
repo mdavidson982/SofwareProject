@@ -29,7 +29,7 @@ e.grid(row = 1 , column= 1, padx= 10,pady= 10)
 #create calculate button
 
 calc = Button(window, text = "Enter")
-calc. grid(row = 2, column = 0,columnspan = 2, padx = 10,pady= 10, )
+calc.grid(row = 2, column = 0,columnspan = 2, padx = 10,pady= 10, )
 
 #Create results box
 
@@ -40,15 +40,16 @@ r.grid(row = 1 , column = 2, padx = 10, pady= 10)
 #Create button definitions
 #Process browse ONCLICK funcion, should allow user to browse system files
 
+
 def browse_click():
-    file = askopenfile(mode = 'r' , filetypes= [('Python Files','*.py')])
+    file = askopenfile(mode = 'r' , filetypes= [('RUN Files','*.RUN')])
     if file is not NONE:
         content = file.read()
-        print(content) #THIS IS NOT DONE 
-                        #USE OS MODULE TO DO
+        print(content) #PARTIALLY DONE, NEED TO LINK TO FILEREADING
+                        #WOULD BE NICE TO TAKE DIRECTORY WHERE FILE WAS FOUND AND PUT INTO INPUT BOX
 
 def button_enter():
-    path = e.get()
+    e.get()
                     #MUST USE DIRECTORY FUNCTIONS CWD
 
 def text_box():
