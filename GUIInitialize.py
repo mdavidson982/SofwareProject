@@ -8,6 +8,8 @@
 import tkinter as tk
 from tkinter import *
 import tkinter.scrolledtext as st
+from tkinter.ttk import *
+from tkinter.filedialog import askopenfile
 import os
 #import FileReading as fr
 
@@ -23,10 +25,6 @@ lb.grid(row = 0, column = 1)
 e = Entry(window)
 e.grid(row = 1 , column= 1, padx= 10,pady= 10)
 
-#create browse file button
-
-browse = Button(window, text = "Browse")
-browse.grid(row = 1 , column = 0, padx = 10, pady = 10)
 
 #create calculate button
 
@@ -42,8 +40,11 @@ r.grid(row = 1 , column = 2, padx = 10, pady= 10)
 #Create button definitions
 #Process browse ONCLICK funcion, should allow user to browse system files
 
-def button_browse():
-    r.insert("browse") #THIS IS NOT DONE 
+def browse_click():
+    file = askopenfile(mode = 'r' , filetypes= [('Python Files','*.py')])
+    if file is not NONE:
+        content = file.read()
+        print(content) #THIS IS NOT DONE 
                         #USE OS MODULE TO DO
 
 def button_enter():
@@ -53,6 +54,9 @@ def button_enter():
 def text_box():
     r.insert("Data") #CALL DATA PROCESSING FROM FILE READING
 
+#create Browse Button for file browsing
 
+browse = Button(window, text = "Browse", command = lambda:browse_click())
+browse.grid(row = 1 , column = 0, padx = 10, pady = 10)
 
 window.mainloop()
