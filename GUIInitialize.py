@@ -45,11 +45,13 @@ def browse_click():
     file = askopenfile(mode = 'r' , filetypes= [('RUN Files','*.RUN')])
     if file is not NONE:
         content = file.read()
-        print(content) #PARTIALLY DONE, NEED TO LINK TO FILEREADING
+        print(content) 
+    filepath = os.getcwd()
+    e.insert(0,filepath)#PARTIALLY DONE, NEED TO LINK TO FILEREADING
                         #WOULD BE NICE TO TAKE DIRECTORY WHERE FILE WAS FOUND AND PUT INTO INPUT BOX
 
 def button_enter():
-    e.get()
+    e.delete()
                     #MUST USE DIRECTORY FUNCTIONS CWD
 
 def text_box():
