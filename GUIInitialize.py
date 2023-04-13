@@ -13,6 +13,8 @@ import os
 
 window = tk.Tk()
 
+window.title("GPA Calculator")
+
 lb = Label(window, text = "Enter filepath")
 lb.grid(row = 0, column = 1)
 
