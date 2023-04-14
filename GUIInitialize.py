@@ -14,54 +14,42 @@ import os
 import FileReading as fr
 import DataProcessing as dp
 
+class Window():
+    
+    def __init__(self,master):
+            frame0 = Frame(master)
+            label= Label(frame0, text="test").pack()
+            frame0.pack(side=LEFT)
+
+            frame1 = Frame(master)
+            r = st.ScrolledText(frame1, width = 30, height = 10,font = ("Times New Roman", 12)).pack()
+            frame1.pack(padx=10,pady=10, side= RIGHT)
+            
+            frame2 = Frame(master)
+            lb= Label(frame2, text = "Enter filepath").pack(side=LEFT)
+            e =Entry(frame2).pack(side=LEFT)
+            calc = Button(frame2, text = "Enter").pack(side=RIGHT)
+            browse = Button(frame2, text = "Browse", command = lambda:browse_click()).pack(side=LEFT)
+            frame2.pack(padx=10,pady=10, side=BOTTOM)
+
+            def browse_click():
+                file = askopenfile(mode = 'r' , filetypes= [('RUN Files','*.RUN')]) #opens file browser system
+                if file is not NONE: 
+                    filepath = os.getcwd()
+                    e.insert(0,filepath)  #gets current working directory and pastes in to the input box
+
+            def button_enter():
+                e.get()
+            
+                            #MUST USE DIRECTORY FUNCTIONS CWD
+
+            def text_box():
+                r.insert("Data") #CALL DATA PROCESSING FROM FILE READING
+
+
 
 window = tk.Tk()
-
+root = Window(window)
 window.title("GPA Calculator")
-
-lb = Label(window, text = "Enter filepath")
-lb.grid(row = 0, column = 1)
-
-#create entry box
-
-e = Entry(window)
-e.grid(row = 1 , column= 1, padx= 10,pady= 10)
-
-
-#create calculate button
-
-calc = Button(window, text = "Enter")
-calc.grid(row = 2, column = 0,columnspan = 2, padx = 10,pady= 10, )
-
-#Create results box
-
-r = st.ScrolledText(window, width = 30, height = 10,font = ("Times New Roman", 12))
-
-r.grid(row = 1 , column = 2, padx = 10, pady= 10)
-
-#Create button definitions
-#Process browse ONCLICK funcion, should allow user to browse system files
-
-
-def browse_click():
-    file = askopenfile(mode = 'r' , filetypes= [('RUN Files','*.RUN')])
-    if file is not NONE:
-        content = file.read()
-        print(content) 
-    filepath = os.getcwd()
-    e.insert(0,filepath)#PARTIALLY DONE, NEED TO LINK TO FILEREADING
-                        #WOULD BE NICE TO TAKE DIRECTORY WHERE FILE WAS FOUND AND PUT INTO INPUT BOX
-
-def button_enter():
-    e.delete()
-                    #MUST USE DIRECTORY FUNCTIONS CWD
-
-def text_box():
-    r.insert("Data") #CALL DATA PROCESSING FROM FILE READING
-
-#create Browse Button for file browsing
-
-browse = Button(window, text = "Browse", command = lambda:browse_click())
-browse.grid(row = 1 , column = 0, padx = 10, pady = 10)
 
 window.mainloop()
