@@ -11,8 +11,10 @@ import tkinter.scrolledtext as st
 from tkinter.ttk import *
 from tkinter.filedialog import askopenfile
 import os
-#import FileReading as fr
+import FileReading as fr
+import DataProcessing as dp
 
+DataFrame = None
 window = tk.Tk()
 
 window.title("GPA Calculator")
@@ -41,11 +43,32 @@ r.grid(row = 1 , column = 2, padx = 10, pady= 10)
 #Process browse ONCLICK funcion, should allow user to browse system files
 
 def browse_click():
-    file = askopenfile(mode = 'r' , filetypes= [('Python Files','*.py')])
+    file = askopenfile(mode = 'r' , filetypes= [('RUN Files','*.run')])
     if file is not NONE:
-        content = file.read()
-        print(content) #THIS IS NOT DONE 
-                        #USE OS MODULE TO DO
+        FileReading = fr.FileReading(file.name)
+        DataFrame = FileReading.openFile()
+        if isinstance(DataFrame,tuple):
+            r.insert(tk.END, "Error: No such File Found\n")
+            r.insert(tk.END, "Missing File: {file}".format(file = DataFrame[1]))
+        #if it's not a tuple. It's a DataFrame
+        else:
+            replace_widget()
+
+def replace_widget():
+    r.destroy()
+    gradeGrid = tk.Frame(window)
+    gradeGrid.pack()
+    gradeGrid.grid(row = 1 , column = 2, padx = 10, pady= 10)
+    for index, row in DataFrame.iterrows():
+        tk.Label(gradeGrid, text=row["Column1"]).grid(row=index, column=0)
+        tk.Label(gradeGrid, text=row["Column2"]).grid(row=index, column=1)
+        tk.Label(gradeGrid, text=row["Column3"]).grid(row=index, column=2)
+        tk.Label(gradeGrid, text=row["Column4"]).grid(row=index, column=3)
+        tk.Label(gradeGrid, text=row["Column5"]).grid(row=index, column=4)
+        tk.Label(gradeGrid, text=row["Column6"]).grid(row=index, column=5)
+        tk.Label(gradeGrid, text=row["Column7"]).grid(row=index, column=6)
+
+
 
 def button_enter():
     path = e.get()
