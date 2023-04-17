@@ -1,51 +1,53 @@
 import tkinter as tk
+from tkinter import ttk
 from tkinter import filedialog
 import pandas as pd
 import FileReading as fr
 import DataProcessing as dp
 
 # Create the Tkinter window
-window = tk.Tk()
-window.title("Select a .run file")
-window.geometry("1500x1500")
+root = tk.Tk()
+root.title("Testing")
+root.config(bg="#3a383d")
+#left_frame = tk.Frame(root,width=200, height = 400)
+#left_frame.grid(row = 0, column = 0, padx = 10, pady = 5)
+
+left_frame = tk.Frame(root, width = 500, height = 750, bg = "#106d8f")
+left_frame.grid(row=0,column=0,padx=10, pady=5)
+
+left_select = tk.Frame(left_frame, width= 500, height = 100)
+left_select.grid(row=0,column=0,padx=10, pady=5)
+
+left_title = tk.Label(left_select, text = "Class Statistics",font = ("Times New Roman", 24), bg= "#626873")
+left_title.grid(row=0, column=0,padx=1, pady=2)
+
+n = tk.StringVar()
+left_selection = ttk.Combobox(left_select,width=27,values=["This","Is","Just","A","Test"])
+left_selection.grid(column=0,row=1)
 
 
-# Function to browse for a file and display its directory path
-def browse_file():
-    file_path = filedialog.askopenfilename(title="Select a .run file", filetypes=[("RUN Files", "*.run")])
-    txt_directory.delete(1.0, tk.END)
-    txt_directory.insert(tk.END, file_path)
-    FileReader = fr.FileReading(file_path)
-    DataFrame = FileReader.openFile()
-    DataFrame = dp.letterTogpa(DataFrame)
+left_statistics = tk.Frame(left_frame, width= 500, height = 650)
+left_statistics.grid(row=1,column=0,padx=10, pady=5)
 
-    # Create a Pandas DataFrame from the selected file
-    df = DataFrame
 
-    # Display the DataFrame in a grid
-    for index, row in df.iterrows():
-        tk.Label(window, text=row["Group"]).grid(row=index+3, column=0)
-        tk.Label(window, text=row["Section"]).grid(row=index+3, column=1)
-        tk.Label(window, text=row["First Name"]).grid(row=index+3, column=2)
-        tk.Label(window, text=row["Last Name"]).grid(row=index+3, column=3)
-        tk.Label(window, text=row["Student ID"]).grid(row=index+3, column=4)
+#------------------------------------------------------------------------------------------------------------------------------#
 
-# Create a label and a text box to display the selected file directory path
-lbl_directory = tk.Label(window, text="Selected file directory:")
-lbl_directory.grid(row=0, column=0)
-txt_directory = tk.Text(window, height=1, width=100)
-txt_directory.grid(row=0, column=1)
+right_frame = tk.Frame(root, width=500, height = 750, bg = "#106d8f" )
+right_frame.grid(row=0,column=1,padx=10, pady=5)
 
-# Create a button to browse for a file
-btn_browse = tk.Button(window, text="Browse", command=browse_file)
-btn_browse.grid(row=1, column=0)
+right_button = tk.Frame(right_frame, width= 500, height = 100, bg= "#626873")
+right_button.grid(row=0,column=0,padx=10, pady=5)
 
-# Create labels for the DataFrame grid
-tk.Label(window, text="Group", width= 10).grid(row=2, column=0)
-tk.Label(window, text="Section", width= 10).grid(row=2, column=1)
-tk.Label(window, text="First Name", width= 10).grid(row=2, column=2)
-tk.Label(window, text="Last Name", width= 10).grid(row=2, column=3)
-tk.Label(window, text="Student ID", width= 10).grid(row=2, column=4)
+right_title = tk.Label(right_button, text = "Class Statistics",font = ("Times New Roman", 24), bg= "#626873")
+right_title.grid(row=0, column=0,padx=1, pady=2)
 
-# Start the Tkinter event loop
-window.mainloop()
+calc = tk.Button(right_button,text = "Change View",font = ("Times New Roman", 18), width = 35)
+calc.grid(row=1,column=0,padx=1, pady=2)
+
+right_grades = tk.Frame(right_frame, width= 500, height = 650)
+right_grades.grid(row=1,column=0,padx=10, pady=5)
+
+
+
+
+root.mainloop()
