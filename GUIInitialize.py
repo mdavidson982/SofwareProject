@@ -52,22 +52,7 @@ def browse_click():
             r.insert(tk.END, "Missing File: {file}".format(file = DataFrame[1]))
         #if it's not a tuple. It's a DataFrame
         else:
-            replace_widget()
-
-def replace_widget():
-    r.destroy()
-    gradeGrid = tk.Frame(window)
-    gradeGrid.pack()
-    gradeGrid.grid(row = 1 , column = 2, padx = 10, pady= 10)
-    for index, row in DataFrame.iterrows():
-        tk.Label(gradeGrid, text=row["Column1"]).grid(row=index, column=0)
-        tk.Label(gradeGrid, text=row["Column2"]).grid(row=index, column=1)
-        tk.Label(gradeGrid, text=row["Column3"]).grid(row=index, column=2)
-        tk.Label(gradeGrid, text=row["Column4"]).grid(row=index, column=3)
-        tk.Label(gradeGrid, text=row["Column5"]).grid(row=index, column=4)
-        tk.Label(gradeGrid, text=row["Column6"]).grid(row=index, column=5)
-        tk.Label(gradeGrid, text=row["Column7"]).grid(row=index, column=6)
-
+            replace_widget():
 
 
 def button_enter():
