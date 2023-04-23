@@ -95,6 +95,7 @@ class FileReading:
                   #Using classdata, we list the remaining data for the students.
                   tempFrame = pd.DataFrame({"Group":group2dArray[i][0],"Section":group2dArray[i][j],"First Name":classData[y][0].replace("\"",""),"Last Name":classData[y][1].replace("\"",""),"Student ID":classData[y][2].replace("\"",""),"Grade":classData[y][3].replace("\"","")},index=range(1))
                   #Once the tempFrame is done. Add it to the sectionData DataFrame.
+                  
                   self.sectionData = pd.concat([self.sectionData, tempFrame], ignore_index=True)
           except FileNotFoundError as e:
             return e,group2dArray[i][j]

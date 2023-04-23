@@ -52,7 +52,8 @@ def browse_click():
             r.insert(tk.END, "Missing File: {file}".format(file = DataFrame[1]))
         #if it's not a tuple. It's a DataFrame
         else:
-            replace_widget():
+            #replace_widget()
+            print("n/a")
 
 
 def button_enter():

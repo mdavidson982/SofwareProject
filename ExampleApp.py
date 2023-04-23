@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
+from pandastable import Table
 import pandas as pd
 import FileReading as fr
 import DataProcessing as dp
@@ -30,6 +31,12 @@ render = ImageTk.PhotoImage(load)
 
 
 
+def select(event):
+    if left_selection.get() == 'Group View':
+        s = Label(left_statistics, text=left_selection.get()).grid(row=0, column=0)
+    elif left_selection.get() == 'Section View':
+        s = Label(left_statistics, text=left_selection.get()).grid(row=0, column=0)
+
 #------------------------------------------------------------Left Window Shit------------------------------------------------------------------#
 left_frame = tk.Frame(root, width = 500, height = 750, bg = "#106d8f")
 left_frame.grid(row=0,column=0,padx=10, pady=5)
@@ -40,7 +47,8 @@ left_select.grid(row=0,column=0,padx=10, pady=5)
 left_title = tk.Label(left_select, text = "Class Statistics",font = ("Times New Roman", 24), bg= "#626873")
 left_title.grid(row=0, column=0,padx=1, pady=2)
 
-left_selection = ttk.Combobox(left_select, width=35, height = 20,values=["This","Is","Just","A","Test"], font=("Times New Roman", 18))
+left_selection = ttk.Combobox(left_select, width=35, height = 20,values=["Group View", "Section View"], font=("Times New Roman", 18))
+left_selection.bind("<<ComboboxSelected>>",select)
 left_selection.grid(column=0,row=1, padx=1, pady=2)
 
 left_statistics = tk.Frame(left_frame, width= 500, height = 650)
