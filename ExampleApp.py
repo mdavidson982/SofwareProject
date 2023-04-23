@@ -2,7 +2,6 @@ import tkinter as tk
 from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
-from pandastable import Table
 import pandas as pd
 import FileReading as fr
 import DataProcessing as dp
@@ -31,12 +30,15 @@ render = ImageTk.PhotoImage(load)
 
 
 
-def select(event):
-    if left_selection.get() == 'Group View':
-        s = Label(left_statistics, text=left_selection.get()).grid(row=0, column=0)
-    elif left_selection.get() == 'Section View':
-        s = Label(left_statistics, text=left_selection.get()).grid(row=0, column=0)
 
+def select(event):
+    
+    
+    if left_selection.get() == 'Group View':
+       group_tree.grid(row = 0, column = 0)
+    elif left_selection.get() == 'Section View':
+        sec_tree.grid(row=0,column=0)
+    
 #------------------------------------------------------------Left Window Shit------------------------------------------------------------------#
 left_frame = tk.Frame(root, width = 500, height = 750, bg = "#106d8f")
 left_frame.grid(row=0,column=0,padx=10, pady=5)
@@ -95,6 +97,18 @@ bottom_browse.grid(row = 1 , column = 0, padx = 10, pady = 10)
 bottom_entry = tk.Entry(bottom_frame, width= 75)
 bottom_entry.grid(row = 1, column= 1)
 
+#------------------------------------------------------------Make tables for stats frame-----------------------------------------------------------
+group_tree = ttk.Treeview(left_statistics, column =("Group","GPA Average") , show='headings',height=5)
+group_tree.column("# 1", anchor=CENTER)
+group_tree.heading("# 1", text="Group")
+group_tree.column("# 2", anchor=CENTER)
+group_tree.heading("# 2", text="GPA Average")
+
+sec_tree = ttk.Treeview(left_statistics, column =("Section","GPA Average") , show='headings',height=5)
+sec_tree.column("# 1", anchor=CENTER)
+sec_tree.heading("# 1", text="Section")
+sec_tree.column("# 2", anchor=CENTER)
+sec_tree.heading("# 2", text="GPA Average")
 
 
 
