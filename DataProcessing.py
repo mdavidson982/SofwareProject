@@ -8,3 +8,8 @@ def letterTogpa(DataFrame):
     DataFrame["gradepoint"] = DataFrame["Grade"].apply(lambda x: grade[x] if x in grade else None )
     return DataFrame
 
+def listedComboBox(DataFrame):
+    grpArray = np.array(DataFrame["Group"].unique())
+    secArray = np.array(DataFrame["Section"].unique())
+    result = np.concatenate((grpArray,secArray))
+    return " ".join(result)

@@ -3,6 +3,7 @@ from tkinter import *
 from tkinter import ttk
 from tkinter import filedialog
 import pandas as pd
+import numpy as np
 import FileReading as fr
 import DataProcessing as dp
 from tkinter.filedialog import askopenfile
@@ -10,6 +11,8 @@ import os, io
 from PIL import Image, ImageTk
 import matplotlib.pyplot as plt
 
+
+global DataFrame
 # Create the Tkinter window
 root = tk.Tk()
 root.title("Testing")
@@ -31,13 +34,7 @@ render = ImageTk.PhotoImage(load)
 
 
 
-def select(event):
-    
-    
-    if left_selection.get() == 'Group View':
-       group_tree.grid(row = 0, column = 0)
-    elif left_selection.get() == 'Section View':
-        sec_tree.grid(row=0,column=0)
+
     
 #------------------------------------------------------------Left Window Shit------------------------------------------------------------------#
 left_frame = tk.Frame(root, width = 500, height = 750, bg = "#106d8f")
@@ -49,8 +46,8 @@ left_select.grid(row=0,column=0,padx=10, pady=5)
 left_title = tk.Label(left_select, text = "Class Statistics",font = ("Times New Roman", 24), bg= "#626873")
 left_title.grid(row=0, column=0,padx=1, pady=2)
 
-left_selection = ttk.Combobox(left_select, width=35, height = 20,values=["Group View", "Section View"], font=("Times New Roman", 18))
-left_selection.bind("<<ComboboxSelected>>",select)
+left_selection = ttk.Combobox(left_select, width=35, height = 20,values=[""], font=("Times New Roman", 18))
+left_selection.bind("<<ComboboxSelected>>",lambda event:select(event))
 left_selection.grid(column=0,row=1, padx=1, pady=2)
 
 left_statistics = tk.Frame(left_frame, width= 500, height = 650)
@@ -62,14 +59,14 @@ left_statistics.grid(row=1,column=0,padx=10, pady=5)
 right_frame = tk.Frame(root, width=500, height = 750, bg = "#106d8f" )
 right_frame.grid(row=0,column=1,padx=10, pady=5)
 
-right_button = tk.Frame(right_frame, width= 500, height = 100, bg= "#626873")
-right_button.grid(row=0,column=0,padx=10, pady=5)
+right_selection = tk.Frame(right_frame, width= 500, height = 100, bg= "#626873")
+right_selection.grid(row=0,column=0,padx=10, pady=5)
 
-right_title = tk.Label(right_button, text = "Class Grades",font = ("Times New Roman", 24), bg= "#626873")
+right_title = tk.Label(right_selection, text = "Class Grades",font = ("Times New Roman", 24), bg= "#626873")
 right_title.grid(row=0, column=0,padx=1, pady=2)
 
-calc = tk.Button(right_button,text = "Calculate",font = ("Times New Roman", 13),bg= "#343434",fg="#ffffff", width = 35)
-calc.grid(row=1,column=0,padx=1, pady=2)
+right_selection = ttk.Combobox(right_selection, width=35, height = 20,values=[""], font=("Times New Roman", 18))
+right_selection.grid(row=1,column=0,padx=1, pady=2)
 
 tabController = ttk.Notebook(right_frame)
 tabController.grid(row=1,column=0,padx=10, pady=5)
@@ -98,17 +95,18 @@ bottom_entry = tk.Entry(bottom_frame, width= 75)
 bottom_entry.grid(row = 1, column= 1)
 
 #------------------------------------------------------------Make tables for stats frame-----------------------------------------------------------
-group_tree = ttk.Treeview(left_statistics, column =("Group","GPA Average") , show='headings',height=5)
-group_tree.column("# 1", anchor=CENTER)
-group_tree.heading("# 1", text="Group")
-group_tree.column("# 2", anchor=CENTER)
-group_tree.heading("# 2", text="GPA Average")
 
-sec_tree = ttk.Treeview(left_statistics, column =("Section","GPA Average") , show='headings',height=5)
-sec_tree.column("# 1", anchor=CENTER)
-sec_tree.heading("# 1", text="Section")
-sec_tree.column("# 2", anchor=CENTER)
-sec_tree.heading("# 2", text="GPA Average")
+#group_tree = ttk.Treeview(left_statistics, column =("Group","GPA Average") , show='headings',height=5)
+#group_tree.column("# 1", anchor=CENTER)
+#group_tree.heading("# 1", text="Group")
+#group_tree.column("# 2", anchor=CENTER)
+#group_tree.heading("# 2", text="GPA Average")
+
+#sec_tree = ttk.Treeview(left_statistics, column =("Section","GPA Average") , show='headings',height=5)
+#sec_tree.column("# 1", anchor=CENTER)
+#sec_tree.heading("# 1", text="Section")
+#sec_tree.column("# 2", anchor=CENTER)
+#sec_tree.heading("# 2", text="GPA Average")
 
 
 
@@ -126,8 +124,19 @@ def browse_click():
             error_label.grid(row = 0, column = 0)
         #if it's not a tuple. It's a DataFrame
         else:
-            left_selection['values'] = ["This","Is","Just","A","Test", "2"]
-            print(DataFrame.to_string())
+            DataFrame = dp.letterTogpa(DataFrame)
+            left_selection["values"] = dp.listedComboBox(DataFrame)
+
+            
+           
+def select(event):
+    selected_item = event.widget.get()
+    print(f"Selected Item: {selected_item}")
+
+    #mask = DataFrame.applymap(lambda x: x == selected_item)
+    #rows_with_specific = DataFrame[mask.any(axis = 1)]
+    #print(rows_with_specific)            
+            
                 
 
 
