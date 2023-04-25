@@ -13,6 +13,7 @@ import matplotlib.pyplot as plt
 
 
 global DataFrame
+DataFrame = pd.DataFrame()
 # Create the Tkinter window
 root = tk.Tk()
 root.title("Testing")
@@ -74,6 +75,9 @@ tabController.grid(row=1,column=0,padx=10, pady=5)
 right_grades = ttk.Frame(tabController, width= 500, height = 625)
 right_grades.grid(row=1,column=0,padx=10, pady=5)
 
+grade_display = Scrollbar(right_grades, orient="vertical")  
+grade_display.grid(row = 0,column = 0)
+
 right_graphs = ttk.Frame(tabController, height = 500)
 ttk.Label(right_graphs, image= render).grid(row = 0, column = 0)
 
@@ -112,6 +116,7 @@ bottom_entry.grid(row = 1, column= 1)
 
 
 def browse_click():
+    global DataFrame
     file = askopenfile(mode = 'r' , filetypes= [('RUN Files','*.run')])
     bottom_entry.delete(0, END)
     bottom_entry.insert(0,file.name)
@@ -130,13 +135,21 @@ def browse_click():
             
            
 def select(event):
+    global DataFrame
     selected_item = event.widget.get()
     print(f"Selected Item: {selected_item}")
-
-    #mask = DataFrame.applymap(lambda x: x == selected_item)
-    #rows_with_specific = DataFrame[mask.any(axis = 1)]
-    #print(rows_with_specific)            
-            
+    SelectedFrame = dp.leftSelect(DataFrame,selected_item)
+    for widget in grade_display.winfo_children():
+        widget.destroy()
+    for index, row in SelectedFrame.iterrows():
+       test1 = Label(grade_display, text=row["First Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width=15)
+       test1.grid(row=index, column=0,columnspan=2, sticky="wens")
+       test2 = Label(grade_display, text=row["Last Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000",width=15)
+       test2.grid(row=index, column=3,columnspan=2, sticky="wens")
+       color = dp.gradeColor(row["Grade"])
+       test3 = Label(grade_display, text=row["Grade"], font = ("Times New Roman", 15), bg = color, fg="#000000",width=15)
+       test3.grid(row=index, column=5,columnspan=2, sticky="wens")
+       
                 
 
 
