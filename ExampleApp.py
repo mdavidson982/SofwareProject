@@ -142,12 +142,12 @@ def select(event):
     for widget in grade_display.winfo_children():
         widget.destroy()
     for index, row in SelectedFrame.iterrows():
-       test1 = Label(grade_display, text=row["First Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width=15)
+       test1 = Label(grade_display, text=row["First Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 15)
        test1.grid(row=index, column=0,columnspan=2, sticky="wens")
-       test2 = Label(grade_display, text=row["Last Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000",width=15)
+       test2 = Label(grade_display, text=row["Last Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 15)
        test2.grid(row=index, column=3,columnspan=2, sticky="wens")
        color = dp.gradeColor(row["Grade"])
-       test3 = Label(grade_display, text=row["Grade"], font = ("Times New Roman", 15), bg = color, fg="#000000",width=15)
+       test3 = Label(grade_display, text=row["Grade"], font = ("Times New Roman", 15), bg = color, fg="#000000", width = 15)
        test3.grid(row=index, column=5,columnspan=2, sticky="wens")
        
                 
