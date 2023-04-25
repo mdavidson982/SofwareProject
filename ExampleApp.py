@@ -142,6 +142,8 @@ def select(event):
     for widget in grade_display.winfo_children():
         widget.destroy()
     for index, row in SelectedFrame.iterrows():
+       #Order DataFrame so information shows A's first, B's Second, and so on
+       #Try to figure out how scrolling works and stop the window from resizing when information is supplied
        test1 = Label(grade_display, text=row["First Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 15)
        test1.grid(row=index, column=0,columnspan=2, sticky="wens")
        test1.bind('<Double-1>', _clipboard_copy(test1))

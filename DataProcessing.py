@@ -18,8 +18,10 @@ def leftSelect(DataFrame, item_selected):
 
     mask = DataFrame.applymap(lambda x: x == item_selected)
     rows_with_specific = DataFrame[mask.any(axis = 1)]
-    return rows_with_specific
+    rows_with_specific_sorted = rows_with_specific.sort_values('gradepoint').reset_index(drop = True)
+    print(rows_with_specific_sorted)
+    return rows_with_specific_sorted
 
 def gradeColor(grade):
-   color = {'A':"#2E7F18",'A-':"#2E7F18",'B+':"#45731E",'B':"#45731E",'B-':"#675E24",'C+':"#8D472B",'C':"#8D472B",'C-':"#8D472B",'D+':"#B13433",'D':"#B13433",'D-':"#B13433",'F':"#C82538", 'P':"#a5a8a6",'NP':"#a5a8a6",'I':"#a5a8a6","W":"#a5a8a6","D":"#a5a8a6"}
+   color = {'A':"#2E7F18",'A-':"#2E7F18",'B+':"#45731E",'B':"#45731E",'B-':"#675E24",'C+':"#8D472B",'C':"#8D472B",'C-':"#8D472B",'D+':"#B13433",'D':"#B13433",'D-':"#B13433",'F':"#C82538", 'P':"#a5a8a6",'NP':"#a5a8a6",'I':"#a5a8a6","W":"#a5a8a6"}
    return color.get(grade,None)
