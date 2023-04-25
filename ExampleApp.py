@@ -144,12 +144,26 @@ def select(event):
     for index, row in SelectedFrame.iterrows():
        test1 = Label(grade_display, text=row["First Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 15)
        test1.grid(row=index, column=0,columnspan=2, sticky="wens")
+       test1.bind('<Double-1>', _clipboard_copy(test1))
+       test1.bind('<Enter>', lambda ev, lab=test1: lab.config(fg='white'))
+       test1.bind('<Leave>', lambda ev, lab=test1: lab.config(fg='black'))
        test2 = Label(grade_display, text=row["Last Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 15)
        test2.grid(row=index, column=3,columnspan=2, sticky="wens")
+       test2.bind('<Double-1>', _clipboard_copy(test2))
+       test2.bind('<Enter>', lambda ev, lab=test2: lab.config(fg='white'))
+       test2.bind('<Leave>', lambda ev, lab=test2: lab.config(fg='black'))
        color = dp.gradeColor(row["Grade"])
        test3 = Label(grade_display, text=row["Grade"], font = ("Times New Roman", 15), bg = color, fg="#000000", width = 15)
        test3.grid(row=index, column=5,columnspan=2, sticky="wens")
-       
+       test3.bind('<Double-1>', _clipboard_copy(test3))
+       test3.bind('<Enter>', lambda ev, lab=test3: lab.config(fg='white'))
+       test3.bind('<Leave>', lambda ev, lab=test3: lab.config(fg='black'))
+
+def _clipboard_copy(inst):
+    def wrapper(event):
+        inst.clipboard_clear()
+        inst.clipboard_append(inst['text'])
+    return wrapper       
                 
 
 
