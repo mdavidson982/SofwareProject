@@ -70,7 +70,7 @@ right_selection = ttk.Combobox(right_selection, width=35, height = 20,values=[""
 right_selection.grid(row=1,column=0,padx=1, pady=2)
 # canvas is the only thing that works with scroll bar
 # place notebook inside canvas to get scrolling to work
-right_canvas = Canvas(right_frame, height=625, width=775)
+right_canvas = Canvas(right_frame, height=400, width=775)
 right_canvas.grid(row= 1, column = 0, padx=10,pady=5)
 
 #Notebook has control of window sizing
@@ -81,13 +81,13 @@ tabController.grid(row=0,column=0,padx=10, pady=5)
 right_grades = ttk.Frame(tabController)
 right_grades.grid(row=1,column=0,padx=10, pady=5)
 
-grade_scroll = Scrollbar(right_grades, orient=VERTICAL, command=right_canvas.yview())  
+grade_scroll = ttk.Scrollbar(right_grades, orient=VERTICAL, command=right_canvas.yview())  
 grade_scroll.grid(row = 0,column = 0)
 
 #Scroll bar configuration 
 right_canvas.configure(yscrollcommand=grade_scroll.set)
 right_canvas.bind('<Configure>', lambda e: right_canvas.configure(scrollregion = right_canvas.bbox()))
-right_canvas.create_window((0,0), window = tabController, anchor = "nw")
+right_canvas.create_window((775,0), window = tabController, anchor = "ne")
 right_graphs = ttk.Frame(tabController, height = 625, width=500, padding=10)
 ttk.Label(right_graphs, image= render).grid(row = 0, column = 0)
 
