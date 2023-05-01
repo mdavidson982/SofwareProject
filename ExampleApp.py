@@ -69,29 +69,32 @@ right_title.grid(row=0, column=0,padx=1, pady=2)
 right_selection = ttk.Combobox(right_selection, width=35, height = 20,values=[""], font=("Times New Roman", 18))
 right_selection.grid(row=1,column=0,padx=1, pady=2)
 # canvas is the only thing that works with scroll bar
-# place notebook inside canvas to get scrolling to work
-right_canvas = Canvas(right_frame, height=400, width=775)
-right_canvas.grid(row= 1, column = 0, padx=10,pady=5)
+# place notebook inside canvas to get scrolling to wor
+
 
 #Notebook has control of window sizing
 #Notebook allows to create tabs to change page to page
-tabController = ttk.Notebook(right_canvas,height=625, width= 775)
-tabController.grid(row=0,column=0,padx=10, pady=5)
+tabController = ttk.Notebook(right_frame,height=625, width= 775)
+tabController.grid(row=1,column=0,padx=10, pady=5)
 
-right_grades = ttk.Frame(tabController)
-right_grades.grid(row=1,column=0,padx=10, pady=5)
+right_canvas = Canvas(tabController, height=647, width=800)
+right_canvas.grid(row= 0, column = 0, padx=10,pady=5)
 
-grade_scroll = ttk.Scrollbar(right_grades, orient=VERTICAL, command=right_canvas.yview())  
+right_grades = ttk.Frame(right_canvas, height=625 , width=500, padding=10)
+right_grades.grid(row=0,column=0,padx=10, pady=5)
+
+grade_scroll = ttk.Scrollbar(right_grades, orient=VERTICAL, command=right_canvas.yview)  
 grade_scroll.grid(row = 0,column = 0)
 
 #Scroll bar configuration 
 right_canvas.configure(yscrollcommand=grade_scroll.set)
-right_canvas.bind('<Configure>', lambda e: right_canvas.configure(scrollregion = right_canvas.bbox()))
-right_canvas.create_window((775,0), window = tabController, anchor = "ne")
+right_canvas.bind('<Configure>', lambda e: right_canvas.configure(scrollregion = right_canvas.bbox("all")))
+right_canvas.create_window((750,0), window = right_grades, anchor = "nw")
+
 right_graphs = ttk.Frame(tabController, height = 625, width=500, padding=10)
 ttk.Label(right_graphs, image= render).grid(row = 0, column = 0)
 
-tabController.add(right_grades, text = "Grades")
+tabController.add(right_canvas, text = "Grades")
 tabController.add(right_graphs, text = "Graphs")
 
 #---------------------------------------------------------------Bottom Window Shit-----------------------------------------------------------------#
@@ -142,7 +145,7 @@ def browse_click():
             DataFrame = dp.letterTogpa(DataFrame)
             left_selection["values"] = dp.listedComboBox(DataFrame)
 
-            
+#---------------------------------------------------------------Populated frames with dataframes--------------------------------------------------------------------------------------
            
 def select(event):
     global DataFrame
@@ -154,22 +157,27 @@ def select(event):
     for index, row in SelectedFrame.iterrows():
        #Order DataFrame so information shows A's first, B's Second, and so on
        #Try to figure out how scrolling works and stop the window from resizing when information is supplied
-       test1 = Label(grade_scroll, text=row["First Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 15)
-       test1.grid(row=index, column=0,columnspan=2, sticky="wens")
-       test1.bind('<Double-1>', _clipboard_copy(test1))
-       test1.bind('<Enter>', lambda ev, lab=test1: lab.config(fg='white'))
-       test1.bind('<Leave>', lambda ev, lab=test1: lab.config(fg='black'))
-       test2 = Label(grade_scroll, text=row["Last Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 15)
-       test2.grid(row=index, column=3,columnspan=2, sticky="wens")
-       test2.bind('<Double-1>', _clipboard_copy(test2))
-       test2.bind('<Enter>', lambda ev, lab=test2: lab.config(fg='white'))
-       test2.bind('<Leave>', lambda ev, lab=test2: lab.config(fg='black'))
+       f_names = Label(right_grades, text=row["First Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 17)
+       f_names.grid(row=index, column=0,columnspan=2, sticky="wens")
+       f_names.bind('<Double-1>', _clipboard_copy(f_names))
+       f_names.bind('<Enter>', lambda ev, lab=f_names: lab.config(fg='white'))
+       f_names.bind('<Leave>', lambda ev, lab=f_names: lab.config(fg='black'))
+       l_names = Label(right_grades, text=row["Last Name"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 17)
+       l_names.grid(row=index, column=3,columnspan=2, sticky="wens")
+       l_names.bind('<Double-1>', _clipboard_copy(l_names))
+       l_names.bind('<Enter>', lambda ev, lab=l_names: lab.config(fg='white'))
+       l_names.bind('<Leave>', lambda ev, lab=l_names: lab.config(fg='black'))
        color = dp.gradeColor(row["Grade"])
-       test3 = Label(grade_scroll, text=row["Grade"], font = ("Times New Roman", 15), bg = color, fg="#000000", width = 15)
-       test3.grid(row=index, column=5,columnspan=2, sticky="wens")
-       test3.bind('<Double-1>', _clipboard_copy(test3))
-       test3.bind('<Enter>', lambda ev, lab=test3: lab.config(fg='white'))
-       test3.bind('<Leave>', lambda ev, lab=test3: lab.config(fg='black'))
+       stu_grades = Label(right_grades, text=row["Grade"], font = ("Times New Roman", 15), bg = color, fg="#000000", width = 17)
+       stu_grades.grid(row=index, column=7,columnspan=2, sticky="wens")
+       stu_grades.bind('<Double-1>', _clipboard_copy(stu_grades))
+       stu_grades.bind('<Enter>', lambda ev, lab=stu_grades: lab.config(fg='white'))
+       stu_grades.bind('<Leave>', lambda ev, lab=stu_grades: lab.config(fg='black'))
+       stu_IDs = Label(right_grades, text=row["Student ID"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 17)
+       stu_IDs.grid(row=index, column=5,columnspan=2, sticky="wens")
+       stu_IDs.bind('<Double-1>', _clipboard_copy(stu_IDs))
+       stu_IDs.bind('<Enter>', lambda ev, lab=stu_IDs: lab.config(fg='white'))
+       stu_IDs.bind('<Leave>', lambda ev, lab=stu_IDs: lab.config(fg='black'))
 
 def _clipboard_copy(inst):
     def wrapper(event):
