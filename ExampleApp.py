@@ -153,7 +153,7 @@ def select(event):
     selected_item = event.widget.get()
     print(f"Selected Item: {selected_item}")
     SelectedFrame = dp.leftSelect(DataFrame,selected_item)
-    for widget in grade_scroll.winfo_children():
+    for widget in right_grades.winfo_children():
         widget.destroy()
     f_names = Label(right_grades, text = "First Name", font = ("Times New Roman", 15), bg="#000000", fg="#ffffff", width = 17) 
     f_names.grid(row=1, column=0,columnspan=2, sticky="wens")
