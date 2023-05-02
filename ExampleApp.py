@@ -155,6 +155,8 @@ def select(event):
     SelectedFrame = dp.leftSelect(DataFrame,selected_item)
     for widget in right_grades.winfo_children():
         widget.destroy()
+    for widget in left_statistics.winfo_children():
+        widget.destroy()
     f_names = Label(right_grades, text = "First Name", font = ("Times New Roman", 15), bg="#000000", fg="#ffffff", width = 17) 
     f_names.grid(row=1, column=0,columnspan=2, sticky="wens")
     l_names = Label(right_grades, text = "Last Name", font = ("Times New Roman", 15), bg="#000000", fg="#ffffff", width = 17)
@@ -163,6 +165,20 @@ def select(event):
     stu_IDs.grid(row=1, column=5,columnspan=2, sticky="wens")
     stu_grades = Label(right_grades, text = "Grade", font = ("Times New Roman", 15), bg="#000000", fg="#ffffff", width = 17)
     stu_grades.grid(row=1, column=7,columnspan=2, sticky="wens")
+
+
+
+    left_letter = Label(left_statistics, text = "Average Letter Grade: ", font = ("Times New Roman", 15), bg="#000000", fg="#ffffff", width = 25)
+    left_letter.grid(row=0, column=0, sticky="wens")
+    left_gpa = Label(left_statistics, text = "Average GPA: ", font = ("Times New Roman", 15), bg="#000000", fg="#ffffff", width = 25)
+    left_gpa.grid(row=1, column=0, sticky="wens")
+    left_deviation = Label(left_statistics, text = "Standard Deviation(σ): ", font = ("Times New Roman", 15), bg="#000000", fg="#ffffff", width = 25)
+    left_deviation.grid(row=2, column=0, sticky="wens")
+
+    avg_letter = dp.averageLetter(SelectedFrame)
+    avg_gpa = dp.averageGPA(SelectedFrame)
+
+
     for index, row in SelectedFrame.iterrows():
        #Order DataFrame so information shows A's first, B's Second, and so on
        #Try to figure out how scrolling works and stop the window from resizing when information is supplied
@@ -188,16 +204,14 @@ def select(event):
        stu_IDs.bind('<Enter>', lambda ev, lab=stu_IDs: lab.config(fg='white'))
        stu_IDs.bind('<Leave>', lambda ev, lab=stu_IDs: lab.config(fg='black'))
        #Populate Left frame with statistics for sections
-       sec_names = Label(left_statistics, text=row["Section"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 17)
-       sec_names.grid(row=index, column=1,columnspan=2, sticky="wens")
-       sec_names.bind('<Double-1>', _clipboard_copy(sec_names))
-       sec_names.bind('<Enter>', lambda ev, lab=sec_names: lab.config(fg='white'))
-       sec_names.bind('<Leave>', lambda ev, lab=sec_names: lab.config(fg='black'))
-       sec_grades = Label(left_statistics, text=row["Grade"], font = ("Times New Roman", 15), bg=color, fg="#000000", width = 17)
-       sec_grades.grid(row=index, column=3,columnspan=2, sticky="wens")
-       sec_grades.bind('<Double-1>', _clipboard_copy(sec_grades))
-       sec_grades.bind('<Enter>', lambda ev, lab=sec_grades: lab.config(fg='white'))
-       sec_grades.bind('<Leave>', lambda ev, lab=sec_grades: lab.config(fg='black'))
+       color = dp.gradeColor(avg_letter)
+       avg_letter_label = Label(left_statistics, text=avg_letter, font = ("Times New Roman", 15), bg=color, fg="#000000", width = 17)
+       avg_letter_label.grid(row=0,column=1,sticky="wens")
+       avg_gpa_label = Label(left_statistics, text=avg_gpa, font = ("Times New Roman", 15), bg=color, fg="#000000", width = 17)
+       avg_gpa_label.grid(row = 1, column= 1, sticky="wens")
+       
+
+       
 
 def _clipboard_copy(inst):
     def wrapper(event):
