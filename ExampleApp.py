@@ -51,9 +51,13 @@ left_selection = ttk.Combobox(left_select, width=35, height = 20,values=[""], fo
 left_selection.bind("<<ComboboxSelected>>",lambda event:select(event))
 left_selection.grid(column=0,row=1, padx=1, pady=2)
 
-left_statistics = tk.Frame(left_frame, width= 600, height = 650)
+left_hold = ttk.Notebook(left_frame, height=625,width=650)
+left_hold.grid(row=1,column=0, padx=10,pady=5)
+
+left_statistics = tk.Frame(left_hold, width= 600, height = 650)
 left_statistics.grid(row=1,column=0,padx=10, pady=5)
 
+left_hold.add(left_statistics)
 
 #---------------------------------------------------------------Right Window Shit---------------------------------------------------------------#
 
@@ -77,7 +81,7 @@ right_selection.grid(row=1,column=0,padx=1, pady=2)
 tabController = ttk.Notebook(right_frame,height=625, width= 775)
 tabController.grid(row=1,column=0,padx=10, pady=5)
 
-right_canvas = Canvas(tabController, height=647, width=800)
+right_canvas = tk.Canvas(tabController, height=647, width=800)
 right_canvas.grid(row= 0, column = 0, padx=10,pady=5)
 
 right_grades = ttk.Frame(right_canvas, height=625 , width=500, padding=10)
@@ -178,6 +182,17 @@ def select(event):
        stu_IDs.bind('<Double-1>', _clipboard_copy(stu_IDs))
        stu_IDs.bind('<Enter>', lambda ev, lab=stu_IDs: lab.config(fg='white'))
        stu_IDs.bind('<Leave>', lambda ev, lab=stu_IDs: lab.config(fg='black'))
+       #Populate Left frame with statistics for sections
+       sec_names = Label(left_statistics, text=row["Section"], font = ("Times New Roman", 15), bg="#a5a8a6", fg="#000000", width = 17)
+       sec_names.grid(row=index, column=1,columnspan=2, sticky="wens")
+       sec_names.bind('<Double-1>', _clipboard_copy(sec_names))
+       sec_names.bind('<Enter>', lambda ev, lab=sec_names: lab.config(fg='white'))
+       sec_names.bind('<Leave>', lambda ev, lab=sec_names: lab.config(fg='black'))
+       sec_grades = Label(left_statistics, text=row["Grade"], font = ("Times New Roman", 15), bg=color, fg="#000000", width = 17)
+       sec_grades.grid(row=index, column=3,columnspan=2, sticky="wens")
+       sec_grades.bind('<Double-1>', _clipboard_copy(sec_grades))
+       sec_grades.bind('<Enter>', lambda ev, lab=sec_grades: lab.config(fg='white'))
+       sec_grades.bind('<Leave>', lambda ev, lab=sec_grades: lab.config(fg='black'))
 
 def _clipboard_copy(inst):
     def wrapper(event):
