@@ -49,3 +49,12 @@ def mad(series):
     absolute_deviations = (series - median).abs()
     absolute_deviations = round(absolute_deviations, 4)
     return absolute_deviations.median()
+
+def zscore(DataFrame):
+    mean = DataFrame["gradepoint"].mean()
+    std = DataFrame["gradepoint"].std()
+    DataFrame["Zscore"] = (DataFrame["gradepoint"] - mean)/std
+    DataFrame["Zscore"] = DataFrame["Zscore"].round(4)
+    return DataFrame
+
+
