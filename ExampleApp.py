@@ -168,15 +168,19 @@ def select(event):
 
 
 
-    left_letter = Label(left_statistics, text = "Average Letter Grade: ", font = ("Times New Roman", 15), bg="#000000", fg="#ffffff", width = 25)
+    left_letter = Label(left_statistics, text = "Average Letter Grade: ", font = ("Times New Roman", 20), bg="#000000", fg="#ffffff", width = 25)
     left_letter.grid(row=0, column=0, sticky="wens")
-    left_gpa = Label(left_statistics, text = "Average GPA: ", font = ("Times New Roman", 15), bg="#000000", fg="#ffffff", width = 25)
+    left_gpa = Label(left_statistics, text = "Average GPA: ", font = ("Times New Roman", 20), bg="#000000", fg="#ffffff", width = 25)
     left_gpa.grid(row=1, column=0, sticky="wens")
-    left_deviation = Label(left_statistics, text = "Standard Deviation(σ): ", font = ("Times New Roman", 15), bg="#000000", fg="#ffffff", width = 25)
+    left_deviation = Label(left_statistics, text = "Standard Deviation(σ): ", font = ("Times New Roman", 20), bg="#000000", fg="#ffffff", width = 25)
     left_deviation.grid(row=2, column=0, sticky="wens")
+    left_mad = Label(left_statistics, text = "Median Absolute Deviation (MAD): ", font = ("Times New Roman", 17), bg="#000000", fg="#ffffff", width = 25)
+    left_mad.grid(row=3, column=0, sticky="wens")
 
     avg_letter = dp.averageLetter(SelectedFrame)
     avg_gpa = dp.averageGPA(SelectedFrame)
+    std = dp.standardDeviation(SelectedFrame)
+    mad = dp.mad(SelectedFrame["gradepoint"])
 
 
     for index, row in SelectedFrame.iterrows():
@@ -205,14 +209,15 @@ def select(event):
        stu_IDs.bind('<Leave>', lambda ev, lab=stu_IDs: lab.config(fg='black'))
        #Populate Left frame with statistics for sections
        color = dp.gradeColor(avg_letter)
-       avg_letter_label = Label(left_statistics, text=avg_letter, font = ("Times New Roman", 15), bg=color, fg="#000000", width = 17)
+       avg_letter_label = Label(left_statistics, text=avg_letter, font = ("Times New Roman", 20), bg=color, fg="#000000", width = 17)
        avg_letter_label.grid(row=0,column=1,sticky="wens")
-       avg_gpa_label = Label(left_statistics, text=avg_gpa, font = ("Times New Roman", 15), bg=color, fg="#000000", width = 17)
+       avg_gpa_label = Label(left_statistics, text=avg_gpa, font = ("Times New Roman", 20), bg=color, fg="#000000", width = 17)
        avg_gpa_label.grid(row = 1, column= 1, sticky="wens")
+       std_label = Label(left_statistics, text = std, font = ("Times New Roman", 20), bg=color, fg="#000000", width = 17)
+       std_label.grid(row = 2, column = 1, sticky = "wens")
+       mad_lable = Label(left_statistics, text = mad, font = ("Times New Roman", 20), bg=color, fg="#000000", width = 17)
+       mad_lable.grid(row = 3, column = 1, stick = "wens")
        
-
-       
-
 def _clipboard_copy(inst):
     def wrapper(event):
         inst.clipboard_clear()

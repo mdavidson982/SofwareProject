@@ -29,7 +29,7 @@ def gradeColor(grade):
 def averageLetter(DataFrame):
     grade_ranges = [("A",(3.68),(4.00)),("A-",(3.34),(3.67)),("B+",(3.01),(3.33)),("B",(2.68),(3.00)),("B-",(2.34),(2.67)),("C+",(2.01),(2.33)), ("C",(1.34),(2.00)),("D+",(1.01),(1.33)),("D",(0.01),(1.00)), ("F",(0.00),(0.00))]
     average_gpa = DataFrame["gradepoint"].mean()
-    print(average_gpa)
+    #print(average_gpa)
     for letter_grade, min_grade, max_grade in grade_ranges:
         if min_grade <= average_gpa <= max_grade:
             return letter_grade
@@ -38,3 +38,14 @@ def averageGPA(DataFrame):
     averageGPA = DataFrame["gradepoint"].mean()
     averageGPA = round(averageGPA,2)
     return averageGPA
+
+def standardDeviation(DataFrame):
+    std = DataFrame["gradepoint"].std()
+    std = round(std, 4)
+    return std
+
+def mad(series):
+    median = series.median()
+    absolute_deviations = (series - median).abs()
+    absolute_deviations = round(absolute_deviations, 4)
+    return absolute_deviations.median()
