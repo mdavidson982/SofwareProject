@@ -23,7 +23,7 @@ def leftSelect(DataFrame, item_selected):
     mask = DataFrame.applymap(lambda x: x == item_selected)
     rows_with_specific = DataFrame[mask.any(axis = 1)]
     rows_with_specific_sorted = rows_with_specific.sort_values('gradepoint').reset_index(drop = True)
-    print(rows_with_specific_sorted)
+    #print(rows_with_specific_sorted)
     return rows_with_specific_sorted
 
 def gradeColor(grade):
@@ -63,6 +63,7 @@ def zscore(DataFrame):
 
 def distributionGraph(DataFrame):
     grade_counts = DataFrame["Grade"].value_counts().sort_index()
+    plt.clf()
     plt.rcParams["figure.figsize"] = [7.50, 3.50]
     plt.rcParams["figure.autolayout"] = True
     plt.bar(grade_counts.index, grade_counts.values)
