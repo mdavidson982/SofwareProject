@@ -10,6 +10,10 @@ from tkinter.filedialog import askopenfile
 import os, io
 from PIL import Image, ImageTk
 import matplotlib.pyplot as plt
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle
+from reportlab.lib.styles import getSampleStyleSheet
 
 
 global DataFrame
@@ -29,12 +33,8 @@ plt.plot([1, 2])
 
 img_buf = io.BytesIO()
 plt.savefig(img_buf, format='png')
-load = Image.open(img_buf)
-render = ImageTk.PhotoImage(load)
-
-
-
-
+#load = Image.open(img_buf)
+#render = ImageTk.PhotoImage(load)
 
     
 #------------------------------------------------------------Left Window Shit------------------------------------------------------------------#
@@ -93,7 +93,7 @@ right_canvas.create_window((0, 0), window=right_grades, anchor="nw")
 right_grades.bind("<Configure>", lambda e: right_canvas.configure(scrollregion=right_canvas.bbox("all")))
 
 right_graphs = ttk.Frame(tabController, height = 625, width=500, padding=10)
-ttk.Label(right_graphs, image= render).grid(row = 0, column = 0)
+#ttk.Label(right_graphs, image= render).grid(row = 0, column = 0)
 
 tabController.add(right_canvas, text = "Grades")
 tabController.add(right_graphs, text = "Graphs")
@@ -180,6 +180,37 @@ def select(event):
     graph_label.grid(row = 0, column = 0)
     print(SelectedFrame)
 
+
+    file_path = bottom_entry.get()
+    file_path = os.path.dirname(file_path)
+    pdf_file = selected_item.split(".")[0] + ".pdf"
+    output_file_path = os.path.join(file_path, pdf_file)
+    doc = SimpleDocTemplate(output_file_path, pagesize = letter)
+    styles = getSampleStyleSheet()
+    style = styles["Normal"]
+    flowables = []
+    #text = "This is a test."
+    #paragraph = Paragraph(text, style)
+    #flowables.append(paragraph)
+    #doc.build(flowables)
+    selected_columns = ["First Name", "Last Name", "Student ID", "Grade", "Zscore"]
+    pdf_frame = SelectedFrame[selected_columns]
+    table_data = [list(pdf_frame.columns)] + pdf_frame.values.tolist()
+    table = Table(table_data)
+    table_style = TableStyle([
+    ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+    ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+    ('FONTSIZE', (0, 0), (-1, 0), 14),
+    ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+    ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+    ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ])
+
+    table.setStyle(table_style)
+    flowables.append(table)
+    doc.build(flowables)
 
     for index, row in SelectedFrame.iterrows():
        #Order DataFrame so information shows A's first, B's Second, and so on
