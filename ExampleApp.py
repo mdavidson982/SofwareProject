@@ -16,7 +16,7 @@ global DataFrame
 DataFrame = pd.DataFrame()
 # Create the Tkinter window
 root = tk.Tk()
-root.title("Testing")
+root.title("Grade Calculator")
 root.config(bg="#3a383d")
 #left_frame = tk.Frame(root,width=200, height = 400)
 #left_frame.grid(row = 0, column = 0, padx = 10, pady = 5)
@@ -113,18 +113,7 @@ bottom_entry = tk.Entry(bottom_frame, width= 75)
 bottom_entry.grid(row = 1, column= 1)
 
 #------------------------------------------------------------Make tables for stats frame-----------------------------------------------------------
-
-#group_tree = ttk.Treeview(left_statistics, column =("Group","GPA Average") , show='headings',height=5)
-#group_tree.column("# 1", anchor=CENTER)
-#group_tree.heading("# 1", text="Group")
-#group_tree.column("# 2", anchor=CENTER)
-#group_tree.heading("# 2", text="GPA Average")
-
-#sec_tree = ttk.Treeview(left_statistics, column =("Section","GPA Average") , show='headings',height=5)
-#sec_tree.column("# 1", anchor=CENTER)
-#sec_tree.heading("# 1", text="Section")
-#sec_tree.column("# 2", anchor=CENTER)
-#sec_tree.heading("# 2", text="GPA Average")
+ 
 
 
 
@@ -186,6 +175,9 @@ def select(event):
     std = dp.standardDeviation(SelectedFrame)
     mad = dp.mad(SelectedFrame["gradepoint"])
     SelectedFrame = dp.zscore(SelectedFrame)
+    graphImage = dp.distributionGraph(SelectedFrame)
+    graph_label = ttk.Label(right_graphs, image = graphImage)
+    graph_label.grid(row = 0, column = 0)
     print(SelectedFrame)
 
 
@@ -220,6 +212,8 @@ def select(event):
        z_score.bind('<Double-1>', _clipboard_copy(z_score))
        z_score.bind('<Enter>', lambda ev, lab=z_score: lab.config(fg='white'))
        z_score.bind('<Leave>', lambda ev, lab=z_score: lab.config(fg='black'))
+
+      
        #Populate Left frame with statistics for sections
        color = dp.gradeColor(avg_letter)
        avg_letter_label = Label(left_statistics, text=avg_letter, font = ("Times New Roman", 20), bg=color, fg="#000000", width = 17)
