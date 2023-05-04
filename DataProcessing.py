@@ -1,6 +1,10 @@
 import pandas as pd
 import numpy as np
 import FileReading as fr
+import matplotlib.pyplot as plt
+import os, io
+from PIL import Image, ImageTk
+
 
 
 def letterTogpa(DataFrame):
@@ -56,5 +60,21 @@ def zscore(DataFrame):
     DataFrame["Zscore"] = (DataFrame["gradepoint"] - mean)/std
     DataFrame["Zscore"] = DataFrame["Zscore"].round(4)
     return DataFrame
+
+def distributionGraph(DataFrame):
+    grade_counts = DataFrame["Grade"].value_counts().sort_index()
+    plt.rcParams["figure.figsize"] = [7.50, 3.50]
+    plt.rcParams["figure.autolayout"] = True
+    plt.bar(grade_counts.index, grade_counts.values)
+    plt.xlabel('Letter Grades')
+    plt.ylabel('Frequency')
+    plt.title('Histogram of Letter Grades')
+    plt.xticks(range(len(grade_counts.index)), grade_counts.index)
+    plt.show()
+    img_buf = io.BytesIO()
+    plt.savefig(img_buf, format='png')
+    load = Image.open(img_buf)
+    render = ImageTk.PhotoImage(load)
+    return render
 
 
