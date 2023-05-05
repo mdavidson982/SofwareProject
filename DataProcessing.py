@@ -3,9 +3,12 @@ import numpy as np
 import FileReading as fr
 import matplotlib.pyplot as plt
 import os, io
-from PIL import Image, ImageTk
-
-
+from PIL import Image as IG
+from reportlab.lib.pagesizes import letter
+from reportlab.lib import colors
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+from reportlab.lib.styles import getSampleStyleSheet
+from reportlab.lib.utils import ImageReader
 
 def letterTogpa(DataFrame):
     grade = {'A':4.00,'A-':3.67,'B+':3.33,'B':3.00,'B-':2.67,'C+':2.33,'C':2.00,'C-':2.00,'D+':1.33,'D':1.00,'D-':0.67,'F':0.00}
@@ -64,18 +67,57 @@ def zscore(DataFrame):
 def distributionGraph(DataFrame):
     grade_counts = DataFrame["Grade"].value_counts().sort_index()
     plt.clf()
-    plt.rcParams["figure.figsize"] = [7.50, 3.50]
+    plt.rcParams["figure.figsize"] = [8.50, 5.50]
     plt.rcParams["figure.autolayout"] = True
     plt.bar(grade_counts.index, grade_counts.values)
     plt.xlabel('Letter Grades')
     plt.ylabel('Frequency')
     plt.title('Histogram of Letter Grades')
     plt.xticks(range(len(grade_counts.index)), grade_counts.index)
-    plt.show()
+    #plt.show()
     img_buf = io.BytesIO()
-    plt.savefig(img_buf, format='png')
-    load = Image.open(img_buf)
-    render = ImageTk.PhotoImage(load)
-    return render
+    plt.savefig(img_buf, format = "jpg")
+    img_buf.seek(0)
+    reportlab_image = ImageReader(img_buf)
+    image = Image(img_buf, width = 450, height = 350)
+    return image
+
+    
 
 
+def makePDF(DataFrame, selection, file_path):
+
+    
+    pdf_file = selection.split(".")[0] + ".pdf"
+    output_file_path = os.path.join(file_path, pdf_file)
+    doc = SimpleDocTemplate(output_file_path, pagesize = letter)
+    styles = getSampleStyleSheet()
+    style = styles["Normal"]
+    flowables = []
+    #text = "This is a test."
+    #paragraph = Paragraph(text, style)
+    #flowables.append(paragraph)
+    #doc.build(flowables)
+    selected_columns = ["First Name", "Last Name", "Student ID", "Grade", "Zscore"]
+    pdf_frame = DataFrame[selected_columns]
+    table_data = [list(pdf_frame.columns)] + pdf_frame.values.tolist()
+    table = Table(table_data)
+    table_style = TableStyle([
+    ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+    ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+    ('FONTSIZE', (0, 0), (-1, 0), 14),
+    ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+    ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+    ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ])
+
+    table.setStyle(table_style)
+    flowables.append(table)
+
+    histogram = distributionGraph(DataFrame)
+    flowables.append(histogram)
+
+
+    doc.build(flowables)

@@ -175,42 +175,16 @@ def select(event):
     std = dp.standardDeviation(SelectedFrame)
     mad = dp.mad(SelectedFrame["gradepoint"])
     SelectedFrame = dp.zscore(SelectedFrame)
-    graphImage = dp.distributionGraph(SelectedFrame)
-    graph_label = ttk.Label(right_graphs, image = graphImage)
-    graph_label.grid(row = 0, column = 0)
-    print(SelectedFrame)
-
+    #graphImage = dp.distributionGraph(SelectedFrame)
+    #graph_label = ttk.Label(right_graphs, image = graphImage)
+    #graph_label.grid(row = 0, column = 0)
+    #print(SelectedFrame)
 
     file_path = bottom_entry.get()
     file_path = os.path.dirname(file_path)
-    pdf_file = selected_item.split(".")[0] + ".pdf"
-    output_file_path = os.path.join(file_path, pdf_file)
-    doc = SimpleDocTemplate(output_file_path, pagesize = letter)
-    styles = getSampleStyleSheet()
-    style = styles["Normal"]
-    flowables = []
-    #text = "This is a test."
-    #paragraph = Paragraph(text, style)
-    #flowables.append(paragraph)
-    #doc.build(flowables)
-    selected_columns = ["First Name", "Last Name", "Student ID", "Grade", "Zscore"]
-    pdf_frame = SelectedFrame[selected_columns]
-    table_data = [list(pdf_frame.columns)] + pdf_frame.values.tolist()
-    table = Table(table_data)
-    table_style = TableStyle([
-    ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
-    ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
-    ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
-    ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
-    ('FONTSIZE', (0, 0), (-1, 0), 14),
-    ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
-    ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
-    ('GRID', (0, 0), (-1, -1), 1, colors.black)
-    ])
 
-    table.setStyle(table_style)
-    flowables.append(table)
-    doc.build(flowables)
+    dp.makePDF(SelectedFrame, selected_item, file_path)
+    
 
     for index, row in SelectedFrame.iterrows():
        #Order DataFrame so information shows A's first, B's Second, and so on
