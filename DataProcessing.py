@@ -94,10 +94,17 @@ def makePDF(DataFrame, selection, file_path):
     styles = getSampleStyleSheet()
     style = styles["Normal"]
     flowables = []
-    #text = "This is a test."
-    #paragraph = Paragraph(text, style)
-    #flowables.append(paragraph)
-    #doc.build(flowables)
+    table = PDFTable(DataFrame)
+    flowables.append(table)
+    histogram = distributionGraph(DataFrame)
+    flowables.append(histogram)
+
+
+    doc.build(flowables)
+
+
+
+def PDFTable(DataFrame):
     selected_columns = ["First Name", "Last Name", "Student ID", "Grade", "Zscore"]
     pdf_frame = DataFrame[selected_columns]
     table_data = [list(pdf_frame.columns)] + pdf_frame.values.tolist()
@@ -114,10 +121,30 @@ def makePDF(DataFrame, selection, file_path):
     ])
 
     table.setStyle(table_style)
-    flowables.append(table)
-
-    histogram = distributionGraph(DataFrame)
-    flowables.append(histogram)
+    return table
 
 
-    doc.build(flowables)
+def sectionZScore(WholeFrame, SelectedFrame):
+    Specific_Group = SelectedFrame["Group"].unique()
+    GroupedFrame = WholeFrame.loc[WholeFrame["Group"] == Specific_Group[0]]
+
+    Specific_Sections = GroupedFrame["Section"].unique()
+    mean = GroupedFrame["gradepoint"].mean()
+    std = GroupedFrame["gradepoint"].std()
+
+    zScores = []
+    for section in Specific_Sections:
+        students = WholeFrame.loc[WholeFrame["Section"] == section]
+        section_z_score = ((students["gradepoint"].mean() - mean) / std).round(4)
+        zScores.append([section, section_z_score])
+
+    zScores = np.array(zScores)
+    return zScores 
+
+def zScoreColor(z_score):
+    z_color_range = [("#2E7F18",(0),(.5)),("#2E7F18",(-.5),(0)),("#8D472B",(.51),(1)),("#8D472B",(-1),(-.51)),("#B13433",(1.1),(1.9)),("#B13433",(-1.9),(-1.01)), ("#C82538",(2.00),(4.00)),("#C82538",(-4.0),(-2.0))]
+    for color, min_score, max_score in z_color_range:
+        if min_score <= z_score.astype(float) <= max_score:
+            return color
+    
+    

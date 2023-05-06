@@ -54,10 +54,21 @@ left_selection.grid(column=0,row=1, padx=1, pady=2)
 left_hold = ttk.Notebook(left_frame, height=625,width=650)
 left_hold.grid(row=1,column=0, padx=10,pady=5)
 
-left_statistics = tk.Frame(left_hold, width= 600, height = 650)
-left_statistics.grid(row=1,column=0,padx=10, pady=5)
+left_canvas = tk.Canvas(left_hold, height=600, width=650)
+left_canvas.grid(row= 0, column = 0, padx=10,pady=5)
 
-left_hold.add(left_statistics)
+left_statistics = tk.Frame(left_hold, width= 600, height = 650)
+
+statistics_scroll = ttk.Scrollbar(left_frame, orient=VERTICAL, command=left_canvas.yview)
+statistics_scroll.grid(row = 0, column = 1, sticky = 'ns')
+
+left_canvas.configure(yscrollcommand=statistics_scroll.set)
+left_canvas.bind('<Configure>', lambda e: left_canvas.configure(scrollregion=left_canvas.bbox("all")))
+
+left_canvas.create_window((0, 0), window=left_statistics, anchor="nw")
+left_statistics.bind("<Configure>", lambda e: left_canvas.configure(scrollregion=left_canvas.bbox("all")))
+
+left_hold.add(left_canvas)
 
 #---------------------------------------------------------------Right Window Shit---------------------------------------------------------------#
 
@@ -79,12 +90,14 @@ tabController.grid(row=1,column=0,padx=10, pady=5)
 right_canvas = tk.Canvas(tabController, height=647, width=800)
 right_canvas.grid(row= 0, column = 0, padx=10,pady=5)
 
+
 # Change the parent of right_grades frame to root window
 right_grades = ttk.Frame(tabController, height=625, width=500, padding=10)
 
 # Change the parent of scrollbar to right_canvas
 grade_scroll = ttk.Scrollbar(right_frame, orient=VERTICAL, command=right_canvas.yview)
 grade_scroll.grid(row=0, column=1, sticky='ns')
+
 
 right_canvas.configure(yscrollcommand=grade_scroll.set)
 right_canvas.bind('<Configure>', lambda e: right_canvas.configure(scrollregion=right_canvas.bbox("all")))
@@ -175,6 +188,7 @@ def select(event):
     std = dp.standardDeviation(SelectedFrame)
     mad = dp.mad(SelectedFrame["gradepoint"])
     SelectedFrame = dp.zscore(SelectedFrame)
+    sectionZscore = dp.sectionZScore(DataFrame,SelectedFrame)
     #graphImage = dp.distributionGraph(SelectedFrame)
     #graph_label = ttk.Label(right_graphs, image = graphImage)
     #graph_label.grid(row = 0, column = 0)
@@ -182,6 +196,7 @@ def select(event):
 
     file_path = bottom_entry.get()
     file_path = os.path.dirname(file_path)
+    print(SelectedFrame)
 
     dp.makePDF(SelectedFrame, selected_item, file_path)
     
@@ -229,6 +244,15 @@ def select(event):
        std_label.grid(row = 2, column = 1, sticky = "wens")
        mad_lable = Label(left_statistics, text = mad, font = ("Times New Roman", 20), bg=color, fg="#000000", width = 17)
        mad_lable.grid(row = 3, column = 1, stick = "wens")
+
+    for index, row in enumerate(sectionZscore):
+        section, z_score = row
+        color = dp.zScoreColor(z_score)
+        classSection = Label(left_statistics, text=section, font = ("Times New Roman", 20), bg="#a5a8a6", fg="#000000", width = 17)
+        classSection.grid(row=index+4,column=0,sticky="wens")
+        classZscore = Label(left_statistics, text= z_score, font = ("Times New Roman", 20), bg=color, fg="#000000", width = 17)
+        classZscore.grid(row=index+4,column=1,sticky="wens")
+        print(section)
        
 def _clipboard_copy(inst):
     def wrapper(event):
