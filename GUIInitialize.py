@@ -245,13 +245,18 @@ def select(event):
        mad_lable = Label(left_statistics, text = mad, font = ("Times New Roman", 20), bg=color, fg="#000000", width = 17)
        mad_lable.grid(row = 3, column = 1, stick = "wens")
 
+
+    left_section = Label(left_statistics, text = "Section", font = ("Times New Roman", 20), bg="#000000", fg="#ffffff", width = 17)
+    left_section.grid(row = 4, column = 0, sticky= "wens")
+    left_zScore = Label(left_statistics, text = "Z Score", font = ("Times New Roman", 20), bg="#000000", fg="#ffffff", width = 17)
+    left_zScore.grid(row = 4, column = 1, sticky = "wens")
     for index, row in enumerate(sectionZscore):
         section, z_score, _ = row
         color = dp.zScoreColor(z_score)
         classSection = Label(left_statistics, text=section, font = ("Times New Roman", 20), bg="#a5a8a6", fg="#000000", width = 17)
-        classSection.grid(row=index+4,column=0,sticky="wens")
+        classSection.grid(row=index+5,column=0,sticky="wens")
         classZscore = Label(left_statistics, text= z_score, font = ("Times New Roman", 20), bg=color, fg="#000000", width = 17)
-        classZscore.grid(row=index+4,column=1,sticky="wens")
+        classZscore.grid(row=index+5,column=1,sticky="wens")
         #print(section)
        
 def _clipboard_copy(inst):
