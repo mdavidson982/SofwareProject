@@ -6,9 +6,10 @@ import os, io
 from PIL import Image as IG
 from reportlab.lib.pagesizes import letter
 from reportlab.lib import colors
-from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image
+from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, TableStyle, Image, KeepTogether
 from reportlab.lib.styles import getSampleStyleSheet
 from reportlab.lib.utils import ImageReader
+from reportlab.lib.enums import TA_CENTER
 
 def letterTogpa(DataFrame):
     grade = {'A':4.00,'A-':3.67,'B+':3.33,'B':3.00,'B-':2.67,'C+':2.33,'C':2.00,'C-':2.00,'D+':1.33,'D':1.00,'D-':0.67,'F':0.00}
@@ -85,19 +86,26 @@ def distributionGraph(DataFrame):
     
 
 
-def makePDF(DataFrame, selection, file_path):
+def makePDF(WholeFrame, SelectedFrame, selection, file_path):
 
     
     pdf_file = selection.split(".")[0] + ".pdf"
     output_file_path = os.path.join(file_path, pdf_file)
     doc = SimpleDocTemplate(output_file_path, pagesize = letter)
-    styles = getSampleStyleSheet()
-    style = styles["Normal"]
     flowables = []
-    table = PDFTable(DataFrame)
+    table = PDFTable(SelectedFrame)
     flowables.append(table)
-    histogram = distributionGraph(DataFrame)
-    flowables.append(histogram)
+    title = PDFText(selection)
+    histogram = distributionGraph(SelectedFrame)
+    spacer = Spacer(1,20)
+    keep_together = KeepTogether([title, spacer, histogram])
+    flowables.append(keep_together)
+
+
+    
+    z_scores = sectionZScore(WholeFrame, SelectedFrame)
+    table = PDFZScoreTable(z_scores)
+    flowables.append(table)
 
 
     doc.build(flowables)
@@ -123,6 +131,50 @@ def PDFTable(DataFrame):
     table.setStyle(table_style)
     return table
 
+def PDFZScoreTable(narray):
+    column_labels = ["Section", "Z Score", "Significance"]
+    narray_list = narray.tolist()
+    narray_list.insert(0, column_labels)
+
+    # Update the significance text and color in the narray_list
+    for row in narray_list[1:]:
+        zscore = float(row[1])
+        if zscore <= -2 or zscore >= 2:
+            row[2] = "Significant"
+        else:
+            row[2] = "Insignificant"
+
+    table = Table(narray_list)
+
+    table_style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 14),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black)
+    ])
+
+    # Apply the text color for significance cells
+    for row_index, row in enumerate(narray_list[1:], start=1):
+        significance_color = colors.red if row[2] == "Significant" else colors.grey
+        table_style.add('TEXTCOLOR', (2, row_index), (2, row_index), significance_color)
+
+    table.setStyle(table_style)
+
+    return table
+
+
+
+def PDFText(selection):
+    styles = getSampleStyleSheet()
+    style = styles["Heading1"]
+    style.alignment = TA_CENTER
+    title_text = f"{selection} Grade Distribution"
+    title = Paragraph(title_text, style)
+    return title
 
 def sectionZScore(WholeFrame, SelectedFrame):
     Specific_Group = SelectedFrame["Group"].unique()
@@ -135,9 +187,12 @@ def sectionZScore(WholeFrame, SelectedFrame):
     zScores = []
     for section in Specific_Sections:
         students = WholeFrame.loc[WholeFrame["Section"] == section]
+        #print(section)
+        #print(students)
         section_z_score = ((students["gradepoint"].mean() - mean) / std).round(4)
-        zScores.append([section, section_z_score])
-
+        zScores.append([section, section_z_score, None])
+    #print("GROUPED FRAME")
+    #print(GroupedFrame)
     zScores = np.array(zScores)
     return zScores 
 

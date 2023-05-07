@@ -68,7 +68,7 @@ left_canvas.bind('<Configure>', lambda e: left_canvas.configure(scrollregion=lef
 left_canvas.create_window((0, 0), window=left_statistics, anchor="nw")
 left_statistics.bind("<Configure>", lambda e: left_canvas.configure(scrollregion=left_canvas.bbox("all")))
 
-left_hold.add(left_canvas)
+left_hold.add(left_canvas, text = "Statistics")
 
 #---------------------------------------------------------------Right Window Shit---------------------------------------------------------------#
 
@@ -153,7 +153,7 @@ def browse_click():
 def select(event):
     global DataFrame
     selected_item = event.widget.get()
-    print(f"Selected Item: {selected_item}")
+   # print(f"Selected Item: {selected_item}")
     SelectedFrame = dp.leftSelect(DataFrame,selected_item)
     for widget in right_grades.winfo_children():
         widget.destroy()
@@ -196,9 +196,9 @@ def select(event):
 
     file_path = bottom_entry.get()
     file_path = os.path.dirname(file_path)
-    print(SelectedFrame)
+    #print(SelectedFrame)
 
-    dp.makePDF(SelectedFrame, selected_item, file_path)
+    dp.makePDF(DataFrame, SelectedFrame, selected_item, file_path)
     
 
     for index, row in SelectedFrame.iterrows():
@@ -246,13 +246,13 @@ def select(event):
        mad_lable.grid(row = 3, column = 1, stick = "wens")
 
     for index, row in enumerate(sectionZscore):
-        section, z_score = row
+        section, z_score, _ = row
         color = dp.zScoreColor(z_score)
         classSection = Label(left_statistics, text=section, font = ("Times New Roman", 20), bg="#a5a8a6", fg="#000000", width = 17)
         classSection.grid(row=index+4,column=0,sticky="wens")
         classZscore = Label(left_statistics, text= z_score, font = ("Times New Roman", 20), bg=color, fg="#000000", width = 17)
         classZscore.grid(row=index+4,column=1,sticky="wens")
-        print(section)
+        #print(section)
        
 def _clipboard_copy(inst):
     def wrapper(event):
